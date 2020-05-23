@@ -12,10 +12,10 @@ module.exports = {
       password: process.env.DEV_DB_PASSWORD
     },
     migrations: {
-      tableName: './data/migrations'
+      directory: './data/migrations'
     },
     seeds: {
-      tableName: './data/seeds'
+      directory: './data/seeds'
     }
   },
 
@@ -28,10 +28,10 @@ module.exports = {
       max: 10
     },
     migrations: {
-      tableName: './data/migrations'
+      directory: './data/migrations'
     },
     seeds: {
-      tableName: './data/seeds'
+      directory: './data/seeds'
     }
   }
 
