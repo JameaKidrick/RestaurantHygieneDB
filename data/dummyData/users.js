@@ -1,27 +1,32 @@
 module.exports = [
   {
-    username: "user1",
-    // password: "$2b$10$yGNKn1RJt4ODgHpJP/7GxOw2Ll41qsPa5/9es0GhIeEPcJUVRkOBi", // password
-    password: 'password1'
+    first_name: 'user',
+    last_name: 'one',
+    username: 'user1',
+    password: '$2b$10$y9UjQXcUVyht3rLRT0Z5h.CXHkSwJR9RtCA624WU/1fzFl.yAv5zi', // password
   },
   {
-    username: "user2",
-    // password: "$2b$10$6hdITF225N.1Kai6LToIBeZqdOAaMqlniGGihQ8os5aIOJRUQ.OPu", // password
-    password: 'password2'
+    first_name: 'user',
+    last_name: 'two',
+    username: 'user2',
+    password: '$2b$10$OryQPhSWOnggnXuMXHYbTOc26bVc1gynbH4u66J3dKWhNyDjDeGSG', // password
   },
   {
-    username: "user3",
-    // password: "$2b$10$Vw2QvobiXwhV6SXxAjV1UemBFMR5N7ZIyAxsmVsvbxUOqxdVuaKAy", // password
-    password: 'password3'
+    first_name: 'user',
+    last_name: 'three',
+    username: 'user3',
+    password: '$2b$10$ptIil50g72Xk5mb6xmyXweqjqG7nQPDw5J53YQLCjgwcoGd8g/7XC', // password
   },
   {
-    username: "user4",
-    // password: "$2b$10$LfpSmsQFgeJ93va35Z3LQOc7OF4lG96/9jxniD629laQK4xrHgqRS", // password
-    password: 'password4'
+    first_name: 'user',
+    last_name: 'four',
+    username: 'user4',
+    password: '$2b$10$NBW/nBvu4/8MXdfiRLEXh.d4/APNWmkqrPxCKVjp25.CU1kkNuk8O', // password
   },
   {
-    username: "user5",
-    // password: "$2b$10$LfpSmsQFgeJ93va35Z3LQOc7OF4lG96/9jxniD629laQK4xrHgqRS", // password
-    password: 'password5'
+    first_name: 'user',
+    last_name: 'five',
+    username: 'user5',
+    password: '$2b$10$JK5U.wPgrRPlnRxe/oqPvOiEUomrycuHA/V0xabCgDwMGloaPm7PS', // password
   }
 ]

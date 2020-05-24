@@ -6,10 +6,10 @@ const validateUserID = (req, res, next) => {
   usersDB.findById(id)
     .then(user => {
       if(!user) {
-        res.status(404).json({ error: `A user with the id ${id} does not exist in the database.` })
+        res.status(404).json({ error: `A user with the id ${id} does not exist in the database.` }) // ✅
       }else{
         req.user = user;
-        next();
+        next(); // ✅
       }
     })
     .catch(error => {

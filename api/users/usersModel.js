@@ -3,6 +3,7 @@ const db = require('../../data/dbConfig');
 module.exports = {
   find,
   findById,
+  findByUsername,
   add,
   update,
   remove
@@ -24,10 +25,23 @@ function findById(id){
     })
 }
 
+// GET SPECIFIC USER BY ID
+function findByUsername(username){
+  return db('users')
+    .where({ 'users.username':username })
+    .first()
+    .then(user => {
+      return user
+    })
+}
+
 // CREATE A NEW USER
 function add(user){
   return db('users')
     .insert(user, 'user_id')
+    .then(newUser => {
+      return newUser[0]
+    })
 }
 
 // UPDATE A USER'S INFORMATION BY USER ID

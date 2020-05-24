@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const usersRouter = require('../api/users/usersRouter');
+const authRouter = require('../api/authorization/authRouter');
 
 const server = express();
 
@@ -14,6 +15,7 @@ server.use(cors());
 server.use(express.json());
 
 server.use('/api/users', usersRouter);
+server.use('/auth', authRouter);
 
 server.get('/', (req, res) => {
   res.send('Hello World!')
