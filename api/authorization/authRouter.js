@@ -37,7 +37,7 @@ router.post('/register', [validateBody], (req, res) => {
       usersDB.findById(store)
         .then(newUser => {
           const token = getJwtToken(newUser.user_id, newUser.username)
-          res.status(201).json({ 'username':newUser.username, 'user_id':newUser.user_id, token })
+          res.status(201).json({ message:'Account successfully created!', 'username':newUser.username, 'user_id':newUser.user_id, token })
         })
         .catch(error => {
           res.status(500).json({ error: 'Internal server error', error })
@@ -46,6 +46,18 @@ router.post('/register', [validateBody], (req, res) => {
     .catch(error => {
       res.status(500).json({ error: 'Internal server error', error })
     })
+});
+
+router.post('/login', [validateBody], (req, res) => {
+  const user = req.user
+  const dbUser = req.dbUser
+
+  if(bcrypt.compareSync(user.password, dbUser.password)){
+    const token = getJwtToken(dbUser.user_id, dbUser.username)
+    res.status(201).json({  message:'Login successful!', 'username':dbUser.username, 'user_id':dbUser.user_id, token })
+  }else{
+    res.status(401).json({ error: 'Invalid credentials: Please check your password and try again.' }); // ✅
+  }
 })
 
 module.exports = router
