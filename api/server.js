@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const usersRouter = require('./users/usersRouter');
 const authRouter = require('./authorization/authRouter');
-const cloudinaryRouter = require('./cloudinary/cloudinary')
+const locatorRouter = require('./locator/locatorRouter');
 
 const server = express();
 
@@ -16,8 +16,8 @@ server.use(cors());
 server.use(express.json());
 
 server.use('/api/users', usersRouter);
-server.use('/auth', authRouter);
-server.use('/api/upload', cloudinaryRouter);
+server.use('/api/auth', authRouter);
+server.use('/api/locate', locatorRouter);
 
 
 server.get('/', (req, res) => {
