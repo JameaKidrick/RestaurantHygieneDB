@@ -1,8 +1,10 @@
 const express = require('express');
 const axios = require('axios');
+const calls = require('./locatorModel');
 
 const router = express.Router();
-// GOOGLE PLACES API DOCS: https://developers.google.com/places/web-service/search
+// GOOGLE PLACES SEARCH API DOCS: https://developers.google.com/places/web-service/search
+// GOOGLE GEOCODING API DOCS: https://developers.google.com/maps/documentation/geocoding/start
 
 // Find Place requests
   // user can find a specific place based on text data (name, address, or phone number)
@@ -22,40 +24,33 @@ router.post('/', (req, res) => {
   const input = req.body.input
   const inputType = req.body.inputType
   const fields = req.body.fields
-  const location = req.body.location
+  const radius = req.body.radius
   let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${input}&inputtype=${inputType}`
 
   if(fields !== ''){
     url += `&fields=${fields}`
   }
-  if(location !== ''){
-    url += `&locationbias=${location}`
-  }
 
-  url += `&key=${key}`
-  console.log('INPUT', location, url)
-
-  if(!input){
-    res.status(400).json({ error: 'Please include the place name, address, or phone number.' })
-  }else if(!inputType){
-    res.status(400).json({ error: 'Please define input type. Use either `textquery` or `phonenumber`.' })
-  }else if((inputType !== 'textquery') && (inputType !== 'phonenumber')){
-    res.status(400).json({ error: 'That is not a valid input type. Please use either `textquery` or `phonenumber`.'})
-  }else {
-    axios
-      .get(url)
-      .then(response => {
-        res.status(200).json(response.data)
-      })
-      .catch(error => {
-        res.status(500).json({ error: 'Internal server error', error })
-      })
-  }
+  calls.geocodingAPI(req.body.userLocation, key)
+    .then(response => {
+      url += `&locationbias=circle:${radius}@${response.lat},${response.lng}`
+      if(!input){
+        res.status(400).json({ error: 'Please include the place name, address, or phone number.' })
+      }else if(!inputType){
+        res.status(400).json({ error: 'Please define input type. Use either `textquery` or `phonenumber`.' })
+      }else if((inputType !== 'textquery') && (inputType !== 'phonenumber')){
+        res.status(400).json({ error: 'That is not a valid input type. Please use either `textquery` or `phonenumber`.'})
+      }else {
+        url += `&key=${key}`
+        calls.placesSearchAPI(url)
+          .then(response => {
+            res.status(200).json(response.data)
+          })
+          .catch(error => {
+            res.status(500).json({ error: 'Internal server error', error })
+          })
+      }
+    })
 })
-
-
-
-
-
 
 module.exports = router;
