@@ -24,14 +24,14 @@ router.get('/', (req, res) => {
 // GET SPECIFIC USER BY ID
 router.get('/:userid', [validateUserID], (req, res) => {
   const user = req.user
-  // usersDB.findById(req.params.userid)
-  //   .then(user => {
-  //     res.status(200).json(user)
-  //   })
-  //   .catch(error => {
-  //     res.status(500).json({ error: 'Internal server error', error})
-  //   })
-  return res.status(200).json(user)
+  usersDB.findById(req.params.userid)
+    .then(user => {
+      res.status(200).json(user)
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Internal server error', error})
+    })
+  // return res.status(200).json(user)
 })
 
 // UPDATE A USER'S INFORMATION BY USER ID
