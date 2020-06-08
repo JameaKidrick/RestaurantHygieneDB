@@ -19,6 +19,22 @@ module.exports = {
     }
   },
 
+  testing: {
+    client: 'pg',
+    useNullAsDefault: true,
+    connection: {
+      database: process.env.DEV_DB_TEST_DATABASE,
+      user:     process.env.DEV_DB_USERNAME,
+      password: process.env.DEV_DB_PASSWORD
+    },
+    migrations: {
+      directory: './data/migrations'
+    },
+    seeds: {
+      directory: './data/seeds'
+    }
+  },
+
   production: {
     client: 'pg',
     useNullAsDefault: true,
@@ -34,5 +50,4 @@ module.exports = {
       directory: './data/seeds'
     }
   }
-
 };

@@ -4,7 +4,8 @@
   "description": "Start of Cat Battles",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cypress open --env DATABASE_ENVIRONMENT=testing",
+    "test-server": "cross-env CYPRESS_DATABASE_ENVIRONMENT=testing nodemon index.js",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
@@ -33,6 +34,8 @@
     "pg": "^8.2.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
+    "cypress": "^4.7.0",
     "nodemon": "^2.0.4"
   }
 }
