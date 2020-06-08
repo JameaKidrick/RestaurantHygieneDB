@@ -118,6 +118,8 @@ The GET to `/api/users/userid` responds with the following:
 
 {
     "user_id": 1,
+    "first_name": "user1first_name",
+    "last_name": "user1last_name",
     "username": "user1"
 }
 ```
