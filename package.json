@@ -4,7 +4,8 @@
   "description": "Start of Cat Battles",
   "main": "index.js",
   "scripts": {
-    "test": "cypress open --env DATABASE_ENVIRONMENT=testing",
+    "test": "cross-env DATABASE_ENV=testing jest --watch",
+    "test-cypress": "cypress open --env DATABASE_ENVIRONMENT=testing",
     "test-server": "cross-env CYPRESS_DATABASE_ENVIRONMENT=testing nodemon index.js",
     "server": "nodemon index.js",
     "start": "node index.js"
@@ -35,7 +36,11 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
-    "cypress": "^4.7.0",
-    "nodemon": "^2.0.4"
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
