@@ -1,5 +1,6 @@
+// ✅ ALL TESTS PASSED (../../jest/locator.test) ✅
+
 const express = require('express');
-const axios = require('axios');
 const calls = require('./locatorModel');
 
 const router = express.Router();
@@ -25,32 +26,60 @@ router.post('/', (req, res) => {
   const inputType = req.body.inputType
   const fields = req.body.fields
   const radius = req.body.radius
+  const userLocation = req.body.userLocation
+  console.log('BODY', req.body)
   let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${input}&inputtype=${inputType}`
 
   if(fields !== ''){
     url += `&fields=${fields}`
   }
 
-  calls.geocodingAPI(req.body.userLocation, key)
-    .then(response => {
-      url += `&locationbias=circle:${radius}@${response.lat},${response.lng}`
-      if(!input){
-        res.status(400).json({ error: 'Please include the place name, address, or phone number.' })
-      }else if(!inputType){
-        res.status(400).json({ error: 'Please define input type. Use either `textquery` or `phonenumber`.' })
-      }else if((inputType !== 'textquery') && (inputType !== 'phonenumber')){
-        res.status(400).json({ error: 'That is not a valid input type. Please use either `textquery` or `phonenumber`.'})
-      }else {
-        url += `&key=${key}`
-        calls.placesSearchAPI(url)
-          .then(response => {
-            res.status(200).json(response.data)
-          })
-          .catch(error => {
-            res.status(500).json({ error: 'Internal server error', error })
-          })
-      }
-    })
+  if(!userLocation){
+    res.status(400).json({ error: 'Please include the desired location. Please include the State.' })
+  }else if(!radius){
+    res.status(400).json({ error: 'Please include the desired radius.' })
+  }else{
+    calls.geocodingAPI(userLocation, key)
+      .then(response => {
+        url += `&locationbias=circle:${radius}@${response.lat},${response.lng}`
+        if(!input){
+          res.status(400).json({ error: 'Please include the place name, address, or phone number.' })
+        }else if(!inputType){
+          res.status(400).json({ error: 'Please define input type. Use either `textquery` or `phonenumber`.' })
+        }else if((inputType !== 'textquery') && (inputType !== 'phonenumber')){
+          res.status(400).json({ error: 'That is not a valid input type. Please use either `textquery` or `phonenumber`.'})
+        }else {
+          url += `&key=${key}`
+          calls.placesSearchAPI(url)
+            .then(response => {
+              res.status(200).json(response.data)
+            })
+            .catch(error => {
+              res.status(500).json({ error: 'Internal server error', error })
+            })
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ error: 'Internal server error', error })
+      })
+  }
 })
 
 module.exports = router;
+
+/*
+BODY {
+  input: 'McDonald',
+  inputType: 'textquery',
+  fields: 'place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed',
+  radius: 2000,
+  userLocation: { userCity: 'Seattle', userState: 'Washington' }        
+}
+
+{
+      input: 'McDonald',
+      fields: 'place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed',
+      radius: 2000,
+      userLocation: { userCity: 'Seattle', userState: 'Washington' } 
+    }
+*/
