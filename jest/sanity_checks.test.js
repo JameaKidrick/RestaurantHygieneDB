@@ -23,6 +23,6 @@ describe("Server Sanity Check", function () {
       .then(response => {
         expect(response.status).toEqual(200);
         expect(response.text).toContain('World');
-      })
+      });
   });
 });

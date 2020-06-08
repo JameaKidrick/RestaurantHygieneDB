@@ -1,3 +1,5 @@
+// ✅ ALL TESTS PASSED (../../jest/authorization.test) ✅
+
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -56,7 +58,7 @@ router.post('/login', [validateBody], (req, res) => {
     const token = getJwtToken(dbUser.user_id, dbUser.username)
     res.status(201).json({  message:'Login successful!', 'username':dbUser.username, 'user_id':dbUser.user_id, token })
   }else{
-    res.status(401).json({ error: 'Invalid credentials: Please check your password and try again.' }); // ✅
+    res.status(401).json({ error: 'Invalid credentials: Please check your password and try again.' });
   }
 })
 
