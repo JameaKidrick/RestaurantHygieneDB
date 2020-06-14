@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env DATABASE_ENV=testing jest --watch",
-    "test-users-model": "cross-env DATABASE_ENV=testing jest /jest/usersModel.test.js --watch",
-    "test-users-router": "cross-env DATABASE_ENV=testing jest /jest/usersRouter.test.js --watch",
+    "test-users-router": "cross-env DATABASE_ENV=testing jest /api/users/tests/usersRouter.test.js --watch",
     "test-cypress": "cypress open --env DATABASE_ENVIRONMENT=testing",
     "test-server": "cross-env CYPRESS_DATABASE_ENVIRONMENT=testing nodemon index.js",
     "server": "nodemon index.js",

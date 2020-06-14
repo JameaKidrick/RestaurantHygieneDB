@@ -1,4 +1,4 @@
-const db = require("../data/dbConfig");
+const db = require("../../../data/dbConfig");
 const {
   find,
   findById,
@@ -6,7 +6,7 @@ const {
   add,
   update,
   remove,
-} = require("../api/users/usersModel");
+} = require("../usersModel");
 
 const usersDummyData = [
   {
@@ -65,8 +65,8 @@ describe("POST user", function () {
   test("Create a new user: database user count should increase by 1", async function () {
     const new_user = {
       username: "username4",
-      first_name: "first_name4",
-      last_name: "last_name4",
+      first_name: "first_name 4",
+      last_name: "last_name 4",
       password: "password4",
     };
 

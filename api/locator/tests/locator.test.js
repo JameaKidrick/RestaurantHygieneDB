@@ -1,5 +1,5 @@
 const request = require("supertest");
-const server = require("../api/server");
+const server = require("../../server");
 
 describe("Google APIs: POST /api/locate", function () {
   test.skip("Should receive 400: Missing userLocation", function () {

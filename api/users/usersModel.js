@@ -1,4 +1,4 @@
-// ✅ ALL TESTS PASSED (../../jest/usersModel.test) ✅
+// ✅ ALL TESTS PASSED (./tests/usersModel.test) ✅
 
 const db = require("../../data/dbConfig");
 
