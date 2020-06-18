@@ -1,5 +1,4 @@
 const db = require("../../../data/dbConfig");
-const { add } = require("../usersModel");
 const server = require("../../server");
 const request = require("supertest");
 
@@ -25,21 +24,38 @@ const usersDummyData = [
 ];
 
 describe("GET all user(s) at /users", function () {
+  let tokens = ''
   beforeAll(async () => {
     await db.raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
 
-    usersDummyData.map((user) => {
-      return add(user);
-    });
+    usersDummyData.map(user => {
+      return request(server)
+        .post('/api/auth/register')
+        .send(user)
+        .then()
+    })
+
+    return request(server)
+      .post("/api/auth/register")
+      .send({
+        username: "username4",
+        first_name: "first name 4",
+        last_name: "last name 4",
+        password: "password4",
+      })
+      .then(response => {
+        token = response.body.token
+      })
   });
 
   test("Should receive 200: retrieve all users in the database", function () {
     return request(server)
       .get("/api/users")
+      .set('Authorization', token)
       .then((response) => {
         expect(response.status).toEqual(200);
         expect(response.type).toMatch(/json/i);
-        expect(response.body).toHaveLength(3);
+        expect(response.body).toHaveLength(4);
       });
   });
 });
@@ -70,14 +86,6 @@ describe("GET user at /users/userid", function () {
 });
 
 describe("PUT user at /users/userid", function () {
-  beforeAll(async () => {
-    await db.raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
-
-    usersDummyData.map((user) => {
-      return add(user);
-    });
-  });
-
   test("Should receive 400: username taken", function () {
     const id = 1;
     const new_user_info = {

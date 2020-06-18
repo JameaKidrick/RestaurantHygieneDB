@@ -1,3 +1,5 @@
+// ✅ ALL TESTS PASSED (./tests/usersRouter.test) ✅
+
 const express = require("express");
 
 const router = express.Router();
@@ -7,9 +9,11 @@ const usersDB = require("./usersModel");
 /******************************* Middleware *******************************/
 const validateUserID = require("../middleware/validateUserID");
 const validateUsername = require('../middleware/validateUsername');
+const verifyToken = require('../authorization/authMiddleware');
 /******************************* Route Handlers *******************************/
 // GET ALL USERS IN DATABASE
-router.get("/", (req, res) => {
+// REQUIRED: LOGGED IN
+router.get("/", [verifyToken], (req, res) => {
   usersDB
     .find()
     .then((users) => {
@@ -21,6 +25,7 @@ router.get("/", (req, res) => {
 });
 
 // GET SPECIFIC USER BY ID
+// REQUIRED: LOGGED IN
 router.get("/:userid", [validateUserID], (req, res) => {
   const user = req.user;
   usersDB
@@ -31,10 +36,11 @@ router.get("/:userid", [validateUserID], (req, res) => {
     .catch((error) => {
       res.status(500).json({ error: "Internal server error", error });
     });
-  // return res.status(200).json(user)
 });
 
 // UPDATE A USER'S INFORMATION BY USER ID
+// REQUIRED: LOGGED IN
+// REQUIRED: MATCHING ID
 router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
   const user = req.user;
   const changes = req.body;
@@ -53,6 +59,8 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
 });
 
 // DELETE A USER BY USER ID
+// REQUIRED: LOGGED IN
+// REQUIRED: MATCHING ID
 router.delete("/:userid", [validateUserID], (req, res) => {
   const user = req.user;
 

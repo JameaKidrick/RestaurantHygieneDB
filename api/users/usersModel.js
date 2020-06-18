@@ -30,7 +30,6 @@ function findById(id) {
 // GET SPECIFIC USER BY USERNAME
 function findByUsername(username) {
   return db("users")
-    .select("user_id", "first_name", "last_name", "username")
     .where({ "users.username": username })
     .first()
     .then((user) => {
