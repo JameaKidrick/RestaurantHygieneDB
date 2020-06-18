@@ -9,11 +9,10 @@ const usersDB = require("./usersModel");
 /******************************* Middleware *******************************/
 const validateUserID = require("../middleware/validateUserID");
 const validateUsername = require('../middleware/validateUsername');
-const verifyToken = require('../authorization/authMiddleware');
 /******************************* Route Handlers *******************************/
 // GET ALL USERS IN DATABASE
 // REQUIRED: LOGGED IN
-router.get("/", [verifyToken], (req, res) => {
+router.get("/", (req, res) => {
   usersDB
     .find()
     .then((users) => {
@@ -45,17 +44,21 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
   const user = req.user;
   const changes = req.body;
 
-  usersDB
-    .update(user.user_id, changes)
-    .then((updatedUser) => {
-      return res.status(201).json({
-        message: "User information successfully updated.",
-        user: updatedUser,
+  if(Number(req.params.userid) === req.decodeJwt.id){
+    usersDB
+      .update(user.user_id, changes)
+      .then((updatedUser) => {
+        return res.status(201).json({
+          message: "User information successfully updated.",
+          user: updatedUser,
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: "Internal server error", error });
       });
-    })
-    .catch((error) => {
-      return res.status(500).json({ error: "Internal server error", error });
-    });
+  }else{
+    res.status(401).json({ error: 'You are not authorized to make changes to this account.' })
+  }
 });
 
 // DELETE A USER BY USER ID
@@ -64,6 +67,7 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
 router.delete("/:userid", [validateUserID], (req, res) => {
   const user = req.user;
 
+  if(Number(req.params.userid) === req.decodeJwt.id){
   usersDB
     .remove(user.user_id)
     .then((deletedUser) => {
@@ -74,6 +78,9 @@ router.delete("/:userid", [validateUserID], (req, res) => {
     .catch((error) => {
       res.status(500).json({ error: "Internal server error", error });
     });
+  }else{
+    res.status(401).json({ error: 'You are not authorized to make changes to this account.' })
+  }
 });
 
 module.exports = router;

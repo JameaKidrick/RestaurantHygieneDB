@@ -3,9 +3,13 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const cors = require('cors');
 
+/******************************* Routers *******************************/
 const usersRouter = require('./users/usersRouter');
 const authRouter = require('./authorization/authRouter');
 const locatorRouter = require('./locator/locatorRouter');
+
+/******************************* Middleware *******************************/
+const verifyToken = require('../api/authorization/authMiddleware');
 
 const server = express();
 
@@ -15,7 +19,7 @@ server.use(morgan('dev'));
 server.use(cors());
 server.use(express.json());
 
-server.use('/api/users', usersRouter);
+server.use('/api/users', [verifyToken], usersRouter);
 server.use('/api/auth', authRouter);
 server.use('/api/locate', locatorRouter);
 
