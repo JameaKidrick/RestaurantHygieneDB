@@ -4,7 +4,6 @@ Inspired by the abrupt presence of COVID-19, I wanted to create an app that peop
 ___
 
 ## **Tech Used**
- -----------------------------------------------------
  - NodeJS
  - ExpressJS
  - PostgreSQL
@@ -14,7 +13,7 @@ ___
  - Google Places API
  -----------------------------------------------------
 ## **ENDPOINTS** 
------------------------------------------------------
+
 ### _Base URL_
 `DEPLOYED LINK`
 ### _Authentication_
@@ -38,7 +37,7 @@ ___
 
 -----------------------------------------------------
 ## **DATA MODELS** 
------------------------------------------------------
+
 ### _Authentication_
 
 #### Register
