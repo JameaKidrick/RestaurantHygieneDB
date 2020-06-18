@@ -117,5 +117,6 @@ dist
 
 # Note files
 notes.md
+cypressNotes.md
 queries.sql
 multi-tableQueries.sql
