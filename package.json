@@ -1,13 +1,11 @@
 {
   "name": "be",
   "version": "1.0.0",
-  "description": "Start of Cat Battles",
+  "description": "Start of Restaurant Hygiene",
   "main": "index.js",
   "scripts": {
     "test": "cross-env DATABASE_ENV=testing jest --watch",
-    "test-users-router": "cross-env DATABASE_ENV=testing jest /api/users/tests/usersRouter.test.js --watch",
-    "test-cypress": "cypress open --env DATABASE_ENVIRONMENT=testing",
-    "test-server": "cross-env CYPRESS_DATABASE_ENVIRONMENT=testing nodemon index.js",
+    "test-locator": "cross-env DATABASE_ENV=testing jest /api/locator/tests/locator.test.js --watch",
     "server": "nodemon index.js",
     "start": "node index.js"
   },

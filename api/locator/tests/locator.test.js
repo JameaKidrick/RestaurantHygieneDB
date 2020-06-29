@@ -2,12 +2,25 @@ const request = require("supertest");
 const server = require("../../server");
 
 describe("Google APIs: POST /api/locate", function () {
+  test.skip("Should receive 400: Missing query AND type", function () {
+    const search = {
+      radius: 2000,
+      userLocation: { userCity: "Seattle", userState: "Washington" },
+    };
+    return request(server)
+      .post("/api/locate")
+      .send(search)
+      .then((response) => {
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toMatch(
+          "Please include a query if no type is provided."
+        );
+      });
+  });
+
   test.skip("Should receive 400: Missing userLocation", function () {
     const search = {
-      input: "McDonald",
-      inputType: "textquery",
-      fields:
-        "place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed",
+      type: 'restaurant',
       radius: 2000,
     };
     return request(server)
@@ -21,50 +34,9 @@ describe("Google APIs: POST /api/locate", function () {
       });
   });
 
-  test.skip("Should receive 400: Missing input", function () {
-    const search = {
-      inputType: "textquery",
-      fields:
-        "place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed",
-      radius: 2000,
-      userLocation: "Seattle, Washington",
-    };
-    return request(server)
-      .post("/api/locate")
-      .send(search)
-      .then((response) => {
-        expect(response.status).toEqual(400);
-        expect(response.body.error).toMatch(
-          "Please include the place name, address, or phone number."
-        );
-      });
-  });
-
-  test.skip("Should receive 400: Missing inputType", function () {
-    const search = {
-      input: "McDonald",
-      fields:
-        "place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed",
-      radius: 2000,
-      userLocation: { userCity: "Seattle", userState: "Washington" },
-    };
-    return request(server)
-      .post("/api/locate")
-      .send(search)
-      .then((response) => {
-        expect(response.status).toEqual(400);
-        expect(response.body.error).toMatch(
-          "Please define input type. Use either `textquery` or `phonenumber`."
-        );
-      });
-  });
-
   test.skip("Should receive 400: Missing radius", function () {
     const search = {
-      input: "McDonald",
-      inputType: "textquery",
-      fields:
-        "place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed",
+      type: 'restaurant',
       userLocation: { userCity: "Seattle", userState: "Washington" },
     };
     return request(server)
@@ -78,32 +50,10 @@ describe("Google APIs: POST /api/locate", function () {
       });
   });
 
-  test.skip("Should receive 400: Invalid inputType", function () {
+  test.skip("Should receive 200: response.data.results array is present; json WITH optional query", function () {
     const search = {
-      input: "McDonald",
-      inputType: "invalid_inputType",
-      fields:
-        "place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed",
-      radius: 2000,
-      userLocation: { userCity: "Seattle", userState: "Washington" },
-    };
-    return request(server)
-      .post("/api/locate")
-      .send(search)
-      .then((response) => {
-        expect(response.status).toEqual(400);
-        expect(response.body.error).toMatch(
-          "That is not a valid input type. Please use either `textquery` or `phonenumber`."
-        );
-      });
-  });
-
-  test.skip("Should receive 200: response.data.candidates array is present; json WITH optional fields", function () {
-    const search = {
-      input: "McDonald",
-      inputType: "textquery",
-      fields:
-        "place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed",
+      query: "pizza",
+      type: 'restaurant',
       radius: 2000,
       userLocation: { userCity: "Seattle", userState: "Washington" },
     };
@@ -112,14 +62,13 @@ describe("Google APIs: POST /api/locate", function () {
       .send(search)
       .then((response) => {
         expect(response.status).toEqual(200);
-        expect(Object.keys(response.body)).toContain("candidates");
+        expect(Object.keys(response.body)).toContain("results");
       });
   });
 
-  test.skip("Should receive 200: response.data.candidates array is present; json WITHOUT optional fields", function () {
+  test.skip("Should receive 200: response.data.results array is present; json WITHOUT optional query", function () {
     const search = {
-      input: "McDonald",
-      inputType: "textquery",
+      type: 'restaurant',
       radius: 2000,
       userLocation: { userCity: "Seattle", userState: "Washington" },
     };
@@ -128,7 +77,38 @@ describe("Google APIs: POST /api/locate", function () {
       .send(search)
       .then((response) => {
         expect(response.status).toEqual(200);
-        expect(Object.keys(response.body)).toContain("candidates");
+        expect(Object.keys(response.body)).toContain("results");
+      });
+  });
+});
+
+describe("Google APIs: POST /api/locate/next", function () {
+  let next = ''
+  
+  // beforeAll(() => {
+  //   const search = {
+  //     type: 'restaurant',
+  //     radius: 2000,
+  //     userLocation: { userCity: "Seattle", userState: "Washington" },
+  //   };
+  //   return request(server)
+  //     .post("/api/locate")
+  //     .send(search)
+  //     .then((response) => {
+  //       next = response.body.next_page_token
+  //     });
+  // })
+
+  
+
+  test.skip("Should receive 200: response.data.results array is present after receiving next page", function () {
+
+    return request(server)
+      .post("/api/locate/next")
+      .send(next)
+      .then((response) => {
+        expect(response.status).toEqual(200);
+        expect(Object.keys(response.body)).toContain("results");
       });
   });
 });
