@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JameaKidrick/CatBattlesDB.git"
+    "url": "git+https://github.com/JameaKidrick/RestaurantHygieneDB.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JameaKidrick/CatBattlesDB/issues"
+    "url": "https://github.com/JameaKidrick/RestaurantHygieneDB/issues"
   },
-  "homepage": "https://github.com/JameaKidrick/CatBattlesDB#readme",
+  "homepage": "https://github.com/JameaKidrick/RestaurantHygieneDB#readme",
   "dependencies": {
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
