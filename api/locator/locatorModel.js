@@ -1,4 +1,5 @@
 const axios = require('axios');
+const restaurantsDB = require('../restaurants/restaurantsModel');
 
 module.exports = {
   placesSearchAPI,
@@ -6,14 +7,24 @@ module.exports = {
 }
 
 async function placesSearchAPI(url){
-  let data = []
   try{
-    const response = await axios.get(url);
-    data = response
+    const response = await axios.get(url)
+    const promises =  response.data.results.map(async place => {
+      await restaurantsDB.averageRatingByPlace_Id(place.place_id)
+        .then(average => {
+          place['avgHygieneRating'] = average
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      return place
+    })
+    const data = await Promise.all(promises)
+    response.data.results = data
+    return response
   } catch(error) {
-    console.log('AXIOS CALL ERROR', error)
+    console.log(error)
   }
-  return data
 }
 
 async function geocodingAPI(userLocation, key){

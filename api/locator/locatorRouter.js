@@ -2,6 +2,7 @@
 
 const express = require("express");
 const calls = require("./locatorModel");
+const reviewsModel = require('../reviews_and_ratings/reviewsModel');
 
 const router = express.Router();
 // GOOGLE PLACES SEARCH API DOCS: https://developers.google.com/places/web-service/search
@@ -52,16 +53,14 @@ router.post("/", (req, res) => {
         }
 
         url += `&location=${response.lat},${response.lng}&radius=${radius}&type=${type}&key=${key}`
-        
         calls
           .placesSearchAPI(url)
           .then((response) => {
-            res.status(200).json(response.data);
+            res.status(200).json(response.data)
           })
           .catch((error) => {
             res.status(500).json({ error: "Internal server error", error });
           });
-        
       })
       .catch((error) => {
         res.status(500).json({ error: "Internal server error", error });
