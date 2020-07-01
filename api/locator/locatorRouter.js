@@ -56,28 +56,36 @@ router.post('/next', (req, res) => {
   const pageToken = req.body.pageToken
   let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?&pagetoken=${pageToken}&key=${key}`
 
-  calls
-    .placesSearchAPI(url)
-    .then((response) => {
-      res.status(200).json(response.data);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: "Internal server error", error });
-    });
+  if(!pageToken){
+    res.status(400).json({ error: 'Please include the pagetoken that is received from the previous axios call\'s response data.' })
+  }else{
+    calls
+      .placesSearchAPI(url)
+      .then((response) => {
+        res.status(200).json(response.data);
+      })
+      .catch((error) => {
+        res.status(500).json({ error: "Internal server error", error });
+      });
+  }
 })
 
 router.post('/details', (req, res) => {
   const places_id = req.body.places_id
   const key = process.env.GOOGLE_API_KEY
 
-  calls
-    .placesDetailsAPI(places_id, key)
-    .then(response => {
-      res.status(200).json(response.data)
-    })
-    .catch((error) => {
-      res.status(500).json({ error: "Internal server error", error });
-    });
+  if(!places_id){
+    res.status(400).json({ error: 'Please include the places_id.' })
+  }else{
+    calls
+      .placesDetailsAPI(places_id, key)
+      .then(response => {
+        res.status(200).json(response.data)
+      })
+      .catch((error) => {
+        res.status(500).json({ error: "Internal server error", error });
+      });
+  }
 })
 
 module.exports = router;
