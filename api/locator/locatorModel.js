@@ -3,7 +3,8 @@ const restaurantsDB = require('../restaurants/restaurantsModel');
 
 module.exports = {
   placesSearchAPI,
-  geocodingAPI
+  geocodingAPI,
+  placesDetailsAPI
 }
 
 async function placesSearchAPI(url){
@@ -36,7 +37,19 @@ async function geocodingAPI(userLocation, key){
     lat = response.data.results[0].geometry.location.lat
     lng = response.data.results[0].geometry.location.lng
   } catch(error) {
-    console.log('AXIOS CALL ERROR', error)
+    console.log(error)
   }
   return { lat, lng }
+}
+
+async function placesDetailsAPI(places_id, key){
+  let data = []
+  try{
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${places_id}&fields=address_component,adr_address,business_status,formatted_address,geometry,icon,name,permanently_closed,photo,place_id,plus_code,type,url,utc_offset,vicinity&key=${key}
+    `);
+    data = response
+  }catch (error) {
+    console.log(error)
+  }
+  return data
 }

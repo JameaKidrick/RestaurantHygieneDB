@@ -6,6 +6,7 @@ exports.up = function(knex) {
 
     table
       .varchar('place_id', 65)
+      .unique()
       .notNullable()
 
     table
