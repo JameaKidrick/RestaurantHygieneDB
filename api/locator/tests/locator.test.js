@@ -20,7 +20,7 @@ describe("Google APIs: POST /api/locate", function () {
 
   test.skip("Should receive 400: Missing userLocation", function () {
     const search = {
-      type: 'restaurant',
+      type: "restaurant",
       radius: 2000,
     };
     return request(server)
@@ -36,7 +36,7 @@ describe("Google APIs: POST /api/locate", function () {
 
   test.skip("Should receive 400: Missing radius", function () {
     const search = {
-      type: 'restaurant',
+      type: "restaurant",
       userLocation: { userCity: "Seattle", userState: "Washington" },
     };
     return request(server)
@@ -53,7 +53,7 @@ describe("Google APIs: POST /api/locate", function () {
   test.skip("Should receive 200: response.data.results array is present; json WITH optional query", function () {
     const search = {
       query: "pizza",
-      type: 'restaurant',
+      type: "restaurant",
       radius: 2000,
       userLocation: { userCity: "Seattle", userState: "Washington" },
     };
@@ -68,7 +68,7 @@ describe("Google APIs: POST /api/locate", function () {
 
   test.skip("Should receive 200: response.data.results array is present; json WITHOUT optional query", function () {
     const search = {
-      type: 'restaurant',
+      type: "restaurant",
       radius: 2000,
       userLocation: { userCity: "Seattle", userState: "Washington" },
     };
@@ -83,8 +83,8 @@ describe("Google APIs: POST /api/locate", function () {
 });
 
 describe("Google APIs: POST /api/locate/next", function () {
-  let next = ''
-  
+  let next = "";
+
   // beforeAll(() => {
   //   const search = {
   //     type: 'restaurant',
@@ -99,16 +99,49 @@ describe("Google APIs: POST /api/locate/next", function () {
   //     });
   // })
 
-  
-
-  test.skip("Should receive 200: response.data.results array is present after receiving next page", function () {
-
+  test.skip("Should receive 400: Missing pagetoken", function () {
     return request(server)
       .post("/api/locate/next")
-      .send(next)
+      .send({})
+      .then((response) => {
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toMatch(
+          "Please include the pagetoken that is received from the previous axios call's response data."
+        );
+      });
+  });
+
+  test.skip("Should receive 200: response.data.results array is present after receiving next page", async function () {
+    console.log(next);
+    let test = await request(server)
+      .post("/api/locate/next")
+      .send({ pageToken: next })
       .then((response) => {
         expect(response.status).toEqual(200);
         expect(Object.keys(response.body)).toContain("results");
+      });
+    console.log(test);
+  });
+});
+
+describe("Google APIs: POST /api/locate/details", function () {
+  test.skip("Should receive 400: Missing places_id", function () {
+    return request(server)
+      .post("/api/locate/details")
+      .send({})
+      .then((response) => {
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toMatch("Please include the places_id.");
+      });
+  });
+
+  test.skip("Should receive 200: response.data.results array is present after retrieving detailed information about restaurant", function () {
+    return request(server)
+      .post("/api/locate/details")
+      .send({ places_id: "ChIJN1t_tDeuEmsRUsoyG83frY4" })
+      .then((response) => {
+        expect(response.status).toEqual(200);
+        expect(Object.keys(response.body)).toContain("result");
       });
   });
 });
