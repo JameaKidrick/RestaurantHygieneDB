@@ -22,5 +22,11 @@ module.exports = [
     "restaurant_id": 3,
     "rating": 0,
     "review": "They werent following any of the protacols set out IF i was a state restaurant hygiene person, i would shuyt  this place DONW"
+  },
+  {
+    "user_id": 5,
+    "restaurant_id": 3,
+    "rating": 0,
+    "review": "dont go hear"
   }
 ]

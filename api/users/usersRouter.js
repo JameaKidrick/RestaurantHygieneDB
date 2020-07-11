@@ -11,7 +11,6 @@ const validateUserID = require("../middleware/validateUserID");
 const validateUsername = require('../middleware/validateUsername');
 /******************************* Route Handlers *******************************/
 // GET ALL USERS IN DATABASE
-// REQUIRED: LOGGED IN
 router.get("/", (req, res) => {
   usersDB
     .find()
@@ -24,7 +23,6 @@ router.get("/", (req, res) => {
 });
 
 // GET SPECIFIC USER BY ID
-// REQUIRED: LOGGED IN
 router.get("/:userid", [validateUserID], (req, res) => {
   const user = req.user;
   usersDB
@@ -38,8 +36,6 @@ router.get("/:userid", [validateUserID], (req, res) => {
 });
 
 // UPDATE A USER'S INFORMATION BY USER ID
-// REQUIRED: LOGGED IN
-// REQUIRED: MATCHING ID
 router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
   const user = req.user;
   const changes = req.body;
@@ -62,8 +58,6 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
 });
 
 // DELETE A USER BY USER ID
-// REQUIRED: LOGGED IN
-// REQUIRED: MATCHING ID
 router.delete("/:userid", [validateUserID], (req, res) => {
   const user = req.user;
 

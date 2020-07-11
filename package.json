@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env DATABASE_ENV=testing jest --watch",
-    "test-locator": "cross-env DATABASE_ENV=testing jest /api/locator/tests/locator.test.js --watch",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
