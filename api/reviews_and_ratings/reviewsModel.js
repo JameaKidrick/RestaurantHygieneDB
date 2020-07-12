@@ -1,3 +1,5 @@
+// ✅ ALL TESTS PASSED (./tests/reviewsModel.test) ✅
+
 const db = require('../../data/dbConfig');
 
 module.exports = {
@@ -18,7 +20,6 @@ function find () {
 }
 
 // GET LIST OF REVIEWS BY RESTAURANT'S ID
-  // JOIN WITH USERS TABLE
 function findByRestaurantId(id) {
   return db('reviews')
     .where({ restaurant_id:id })
@@ -27,6 +28,7 @@ function findByRestaurantId(id) {
 // GET SPECIFIC REVIEW BY REVIEW'S ID
 function findById(id) {
   return db('reviews')
+    .select('id', 'user_id', 'restaurant_id', 'rating', 'review')
     .where({ id })
     .first()
 }

@@ -1,10 +1,25 @@
+// ✅ ALL TESTS PASSED (./tests/restaurantsRouter.test) ✅
+
 const express = require('express');
 const restaurantsDB = require('./restaurantsModel');
 
 const router = express.Router();
 
-// ALL ROUTERS REQUIRE USER TO BE SIGNED IN
+/******************************* Middleware *******************************/
+const validateRestaurantID = (req, res, next) => {
+  const id = req.params.restaurant_id
 
+  restaurantsDB.findByRestaurantId(id)
+    .then(restaurant => {
+      if(!restaurant){
+        res.status(404).json({ error: `There is no restaurant in the database with the id ${id}` })
+      }else{
+        next()
+      }
+    })
+}
+
+/******************************* Route Handlers *******************************/
 // GET ALL RESTAURANTS
 router.get('/', (req, res) => {
   restaurantsDB.find()
@@ -17,7 +32,7 @@ router.get('/', (req, res) => {
 })
 
 // GET SPECIFIC RESTAURANT BY RESTAURANT_ID
-router.get('/:restaurant_id', (req, res) => {
+router.get('/:restaurant_id', [validateRestaurantID], (req, res) => {
   restaurantsDB.findByRestaurantId(req.params.restaurant_id)
     .then(restaurant => {
       res.status(200).json(restaurant)
@@ -28,7 +43,7 @@ router.get('/:restaurant_id', (req, res) => {
 })
 
 // GET SPECIFIC RESTAURANT BY PLACE_ID
-router.get('/places/place_id', (req, res) => {
+router.get('/place/:place_id', (req, res) => {
   restaurantsDB.findByPlaceId(req.params.place_id)
     .then(restaurant => {
       res.status(200).json(restaurant)
@@ -40,7 +55,7 @@ router.get('/places/place_id', (req, res) => {
 
 // GET RATINGS BY RESTAURANT'S PLACE_ID
 router.get('/ratings/place/:place_id', (req, res) => {
-  reviewsDB.averageRatingByPlace_Id(req.params.place_id)
+  restaurantsDB.averageRatingByPlace_Id(req.params.place_id)
     .then(rating => {
       res.status(200).json(rating)
     })
@@ -51,6 +66,10 @@ router.get('/ratings/place/:place_id', (req, res) => {
 
 // ADD NEW RESTAURANT
 router.post('/', (req, res) => {
+  if(!req.body.place_id){
+    return res.status(400).json({ error: 'Please include the place_id.' })
+  }
+
   restaurantsDB.addRestaurant(req.body.place_id)
     .then(newRestaurant => {
       res.status(201).json({ message: 'Restaurant successfully created!', newRestaurant })
@@ -61,7 +80,7 @@ router.post('/', (req, res) => {
 })
 
 // UPDATE RESTAURANT
-router.put('/:restaurant_id', (req, res) => {
+router.put('/:restaurant_id', [validateRestaurantID], (req, res) => {
   restaurantsDB.updateRestaurant(req.params.restaurant_id, req.body)
     .then(updatedRestaurant => {
       res.status(201).json({ message: 'Restaurant successfully updated!', updatedRestaurant })
@@ -72,7 +91,7 @@ router.put('/:restaurant_id', (req, res) => {
 })
 
 // DELETE RESTAURANT
-router.delete('/:restaurant_id', (req, res) => {
+router.delete('/:restaurant_id', [validateRestaurantID], (req, res) => {
   restaurantsDB.removeRestaurant(req.params.restaurant_id)
     .then(deletedRestaurant => {
       res.status(201).json({ message: 'Restaurant successfully deleted!', deletedRestaurant})
