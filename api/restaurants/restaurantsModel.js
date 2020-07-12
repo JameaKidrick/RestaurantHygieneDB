@@ -20,6 +20,7 @@ function find() {
 // GET SPECIFIC RESTAURANT BY RESTAURANT_ID
 function findByRestaurantId(id) {
   return db("restaurants")
+  .select('restaurant_id', 'place_id', 'average_rating')
   .where({ restaurant_id: id })
   .first();
 }
@@ -27,6 +28,7 @@ function findByRestaurantId(id) {
 // GET SPECIFIC RESTAURANT BY PLACE_ID
 function findByPlaceId(id) {
   return db("restaurants")
+  .select('restaurant_id', 'place_id', 'average_rating')
   .where({ place_id: id })
   .first();
 }

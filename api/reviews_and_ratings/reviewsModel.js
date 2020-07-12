@@ -28,6 +28,7 @@ function findByRestaurantId(id) {
 // GET SPECIFIC REVIEW BY REVIEW'S ID
 function findById(id) {
   return db('reviews')
+    .select('id', 'user_id', 'restaurant_id', 'rating', 'review')
     .where({ id })
     .first()
 }

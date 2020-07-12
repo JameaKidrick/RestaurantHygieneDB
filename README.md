@@ -27,9 +27,33 @@ ___
 | Method        | Request URL               | Description                                                                     | Authorization Needed            |
 | ------------- | :-----------------------: | ------------------------------------------------------------------------------- | :--------------------: |
 | GET           | `/api/users`           | Gets a list of all users                                                      | Token |
-| GET           | `/users/users/:userid`       | Get a specific user by user id this is only accessible by logged in users | Token |
-| PUT           | `/api/users/:userid`       | Update user by user id this is only available to the specified user          | Token |
-| DELETE        | `/api/users/:userid`       | Delete user by user id this is only available to the specified user          | Token |
+| GET           | `/api/users/:userid`       | Get a specific user by user id this is only accessible by logged in users | Token |
+| PUT           | `/api/users/:userid`       | Update user by user id          | Token |
+| DELETE        | `/api/users/:userid`       | Delete user by user id          | Token |
+
+### _Restaurants_
+##### This route works more as a way to join the Restaurant Hygiene database and the Google Places API database. The user will not be able to add, edit, or remove restaurants.
+| Method        | Request URL               | Description                                                                     |
+| ------------- | :-----------------------: | ------------------------------------------------------------------------------- |
+| GET           | `/api/restaurants`           | Gets a list of all restaurants
+| GET           | `/api/restaurants/:restaurant_id`       | Get a specific restaurant by its id
+| GET           | `/api/restaurants/place/:place_id`       | Get a specific restaurant by its place_id which is originally given by the Google Places API
+| GET           | `/api/restaurants/ratings/place/:place_id`       | Get a specific restaurant's average hygiene rating by its place_id
+| POST          | `/api/restaurants`    | Create a new restaurant
+| PUT           | `/api/restaurants/:restaurant_id`       | Update restaurant by restaurant id          | Token |
+| DELETE        | `/api/restaurants/:restaurant_id`       | Delete restaurant by restaurant id          | Token |
+
+### _Reviews_
+| Method        | Request URL               | Description                                                                     | Authorization Needed            |
+| ------------- | :-----------------------: | ------------------------------------------------------------------------------- | :--------------------: |
+| GET           | `/api/reviews`           | Gets a list of all reviews                                                      | Token |
+| GET           | `/api/reviews/restaurant/:restaurant_id`       | Get a list of reviews for a specific restaurant by restaurant id | Token |
+| GET           | `/api/reviews/:review_id`       | Get a specific review by review id | Token |
+| GET           | `/api/reviews/user/:userid`       | Get a list of reviews left by a specific user by user id | Token |
+| GET           | `/api/reviews/ratings/restaurant/:restaurant_id`       | Get the average hygiene rating for a specific restaurant by restaurant id | None |
+| POST          | `/api/reviews/restaurant/:place_id`       | Create a new review for a restaurant by the place_id   | Token |
+| PUT           | `/api/reviews/:review_id`       | Update review or rating by review id          | Token |
+| DELETE        | `/api/reviews/:review_id`       | Delete review by review id         | Token |
 
 ### _Locator_
 | Method        | Request URL            | Description                          | Authorization Needed            |
@@ -108,7 +132,6 @@ The GET to `/api/users` responds with all of the users in the database:
 -----------------------------------------------------
 The GET to `/api/users/userid` responds with the following:
 ```
-
 {
     "user_id": 1,
     "first_name": "user1first_name",
@@ -159,10 +182,351 @@ The DELETE to `/api/users/:userid` responds with the 'DELETED' object:
 {
   "message": "User has been successfully deleted.",
   "deletedUser": {
-      "user_id": 2,
-      "first_name": "user",
-      "last_name": "two",
-      "username": "user2"
+    "user_id": 2,
+    "first_name": "user",
+    "last_name": "two",
+    "username": "user2"
+  }
+}
+```
+-----------------------------------------------------
+### _Restaurants_
+
+The GET to `/api/restaurants` responds with all of the restaurants in the database:
+```
+[
+  {
+    "restaurant_id": 1,
+    "place_id": "pZMbHaIecBPUcBEXAMPLEmmgnQo9AT7P",
+    "average_rating": null,
+    "created_at": "2020-07-01T18:24:47.981Z",
+    "updated_at": "2020-07-01T18:24:47.981Z"
+  },
+  {
+    "restaurant_id": 2,
+    "place_id": "8a3wdhAceVIYuMEXAMPLE2huVbIBlu2H",
+    "average_rating": 5,
+    "created_at": "2020-07-01T18:24:47.981Z",
+    "updated_at": "2020-07-01T18:24:47.981Z"
+  },
+  {
+    "restaurant_id": 3,
+    "place_id": "vE79xcQrtbvN4xEXAMPLEx58WpuMaHF8",
+    "average_rating": 2,
+    "created_at": "2020-07-01T18:24:47.981Z",
+    "updated_at": "2020-07-01T18:24:47.981Z"
+  }
+]
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| restaurant_id    | primary key |
+| place_id         | string      |
+| average_rating   | integer (null as default)      |
+| created_at       | string      |
+| updated_at       | string      |
+-----------------------------------------------------
+The GET to `/api/restaurants/:restaurant_id` responds with the following:
+```
+{
+  "restaurant_id": 2,
+  "place_id": "8a3wdhAceVIYuMEXAMPLE2huVbIBlu2H",
+  "average_rating": 5,
+}
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| restaurant_id    | primary key |
+| place_id         | string      |
+| average_rating   | integer (null as default) |
+-----------------------------------------------------
+The GET to `/api/restaurants/place/:place_id` responds with the following:
+```
+{
+  "restaurant_id": 2,
+  "place_id": "8a3wdhAceVIYuMEXAMPLE2huVbIBlu2H",
+  "average_rating": 5,
+}
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| restaurant_id    | primary key |
+| place_id         | string      |
+| average_rating   | integer (null as default) |
+-----------------------------------------------------
+The GET to `/api/restaurants/ratings/place/:place_id` responds with the following:
+```
+2
+```
+| Data         | Data Type   |
+| ---------------- | :---------: |
+| average hygiene rating   | integer (null as default) |
+-----------------------------------------------------
+The POST to `/api/restaurants` expects the following data:
+```
+{
+  "place_id": "hroVNEWgiUAmoZRESTAURANTwQfX5d52ThEXAMPLE9G0k"
+}
+```
+| Property   | Data Type   | Required   |
+| ---------- | :---------: | :--------: |
+| place_id   | string      | yes        |
+-----------------------------------------------------
+The PUT to `/api/restaurants/:restaurant_id` expects at least one of the following fields:
+```
+{
+  "place_id": "pZMbHaIecBPUcBEXAMPLEmmgnQo9AT7P",
+  "average_rating": null
+}
+```
+| Property   | Data Type   |
+| ---------- | :---------: |
+| place_id   | string      |
+| average_rating   | integer |
+
+Example change:
+```
+{
+  "average_rating": 5
+}
+```
+It will look like this after changing at least one field:
+
+```
+{
+  "restaurant_id": 1,
+  "place_id": "pZMbHaIecBPUcBEXAMPLEmmgnQo9AT7P",
+  "average_rating": 5
+}
+```
+-----------------------------------------------------
+The DELETE to `/api/restaurants/:restaurant_id` responds with the 'DELETED' object:
+```
+{
+  "message": "Restaurant successfully deleted!",
+  "deletedRestaurant": {
+    "restaurant_id": 3,
+    "place_id": "vE79xcQrtbvN4xEXAMPLEx58WpuMaHF8",
+    "average_rating": 2,
+  }
+}
+```
+-----------------------------------------------------
+### _Reviews_
+
+The GET to `/api/restaurants` responds with all of the reviews in the database:
+```
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "restaurant_id": 2,
+    "rating": 5,
+    "review": "They practiced great hygiene. All of the employees were wearing masks and gloves.",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 2,
+    "user_id": 2,
+    "restaurant_id": 2,
+    "rating": 4,
+    "review": "I think they wash their hands and stuff",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 3,
+    "user_id": 3,
+    "restaurant_id": 2,
+    "rating": 3,
+    "review": "I saw an employee around the food with no mask on. Kind of gross. The rest of the employees had masks on though.",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 4,
+    "user_id": 5,
+    "restaurant_id": 3,
+    "rating": 0,
+    "review": "They were not following any of the protocols set out by the state.",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 5,
+    "user_id": 5,
+    "restaurant_id": 3,
+    "rating": 0,
+    "review": "Choose another restaurant",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  }
+]
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| id               | primary key |
+| user_id          | integer      |
+| restaurant_id    | integer      |
+| rating           | integer     |
+| review           | string      |
+| created_at       | string      |
+| updated_at       | string      |
+-----------------------------------------------------
+The GET to `/api/reviews/restaurant/:restaurant_id` responds with a list of all reviews for a restaurant:
+```
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "restaurant_id": 2,
+    "rating": 5,
+    "review": "They practiced great hygiene. All of the employees were wearing masks and gloves.",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 2,
+    "user_id": 2,
+    "restaurant_id": 2,
+    "rating": 4,
+    "review": "I think they wash their hands and stuff",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 3,
+    "user_id": 3,
+    "restaurant_id": 2,
+    "rating": 3,
+    "review": "I saw an employee around the food with no mask on. Kind of gross. The rest of the employees had masks on though.",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  }
+]
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| id               | primary key |
+| user_id          | integer     |
+| restaurant_id    | integer     |
+| rating           | integer     |
+| review           | string      |
+| created_at       | string      |
+| updated_at       | string      |
+-----------------------------------------------------
+The GET to `/api/reviews/:review_id` responds with the following:
+```
+{
+  "id": 3,
+  "user_id": 3,
+  "restaurant_id": 2,
+  "rating": 3,
+  "review": "I saw an employee around the food with no mask on. Kind of gross. The rest of the employees had masks on though."
+}
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| id               | primary key |
+| user_id          | integer     |
+| restaurant_id    | integer     |
+| rating           | integer     |
+| review           | string      |
+-----------------------------------------------------
+The GET to `/api/reviews/user/:userid` responds with a list of all reviews left by a user:
+```
+[
+  {
+    "id": 4,
+    "user_id": 5,
+    "restaurant_id": 3,
+    "rating": 0,
+    "review": "They were not following any of the protocols set out by the state.",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  },
+  {
+    "id": 5,
+    "user_id": 5,
+    "restaurant_id": 3,
+    "rating": 0,
+    "review": "Choose another restaurant",
+    "created_at": "2020-07-11T23:50:38.223Z",
+    "updated_at": "2020-07-11T23:50:38.223Z"
+  }
+]
+```
+| Property         | Data Type   |
+| ---------------- | :---------: |
+| id               | primary key |
+| user_id          | integer     |
+| restaurant_id    | integer     |
+| rating           | integer     |
+| review           | string      |
+| created_at       | string      |
+| updated_at       | string      |
+-----------------------------------------------------
+The GET to `/api/reviews/ratings/restaurant/:restaurant_id` responds with the following:
+```
+4
+```
+| Data         | Data Type   |
+| ---------------- | :---------: |
+| average hygiene rating   | integer |
+-----------------------------------------------------
+The POST to `/api/reviews/restaurant/:place_id` expects the following data:
+```
+{
+  "rating": 5,
+  "review": "This place is great!"
+}
+```
+| Property   | Data Type   | Required   |
+| ---------- | :---------: | :--------: |
+| rating     | string      | yes        |
+| review     | string      | yes        |
+-----------------------------------------------------
+The PUT to `/api/reviews/:review_id` expects one of the following fields:
+```
+{
+  "rating": 5,
+  "review": "This place is great!"
+}
+```
+| Property   | Data Type   | Required   |
+| ---------- | :---------: | :--------: |
+| rating     | string      | yes        |
+| review     | string      | yes        |
+
+Example change:
+```
+{
+  "rating": 5
+}
+```
+It will look like this after changing at least one field:
+
+```
+{
+  "id": 3,
+  "user_id": 3,
+  "restaurant_id": 2,
+  "rating": 5,
+  "review": "I saw an employee around the food with no mask on. Kind of gross. The rest of the employees had masks on though."
+}
+```
+-----------------------------------------------------
+The DELETE to `/api/reviews/:review_id` responds with the 'DELETED' object:
+```
+{
+  "message": "Review successfully deleted!",
+  "deletedReview": {
+    "id": 1,
+    "user_id": 1,
+    "restaurant_id": 2,
+    "rating": 5,
+    "review": "They practiced great hygiene. All of the employees were wearing masks and gloves."
   }
 }
 ```
@@ -217,4 +581,4 @@ The POST expects the `required` information:
 | ------------ | :---------: | ------- |
 | next_page    | string      | Next page token received from the previous API call |
 
-*Last Updated: 6/29/2020 by Jamea Kidrick*
+*Last Updated: 7/11/2020 by Jamea Kidrick*
