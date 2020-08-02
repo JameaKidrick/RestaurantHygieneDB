@@ -22,7 +22,7 @@ exports.up = function(knex) {
       .notNullable()
 
     table
-      .integer('rating')
+      .float('rating')
       .notNullable()
 
     table
