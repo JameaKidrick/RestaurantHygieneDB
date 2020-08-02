@@ -11,6 +11,7 @@ const authRouter = require('./authorization/authRouter');
 const locatorRouter = require('./locator/locatorRouter');
 const reviewsRouter = require('./reviews_and_ratings/reviewsRouter');
 const restaurantsRouter = require('./restaurants/restaurantsRouter');
+const fave_restaurantsRouter = require('./fave_restaurants/fave_restaurantsRouter');
 
 /******************************* Middleware *******************************/
 const verifyToken = require('../api/authorization/authMiddleware');
@@ -48,6 +49,7 @@ server.use('/api/auth', authRouter);
 server.use('/api/locate', locatorRouter);
 server.use('/api/reviews', reviewsRouter);
 server.use('/api/restaurants', restaurantsRouter);
+server.use('/api/favorites', [verifyToken], fave_restaurantsRouter);
 
 
 server.get('/', (req, res) => {
