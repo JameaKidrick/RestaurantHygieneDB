@@ -10,7 +10,11 @@ exports.up = function(knex) {
       .notNullable()
 
     table
-      .integer('average_rating')
+      .varchar('restaurant_name', 155)
+      .notNullable()
+
+    table
+      .varchar('restaurant_address', 155)
 
     table
       .timestamps(true, true)

@@ -20,7 +20,7 @@ function find() {
 // GET SPECIFIC RESTAURANT BY RESTAURANT_ID
 function findByRestaurantId(id) {
   return db("restaurants")
-  .select('restaurant_id', 'place_id', 'average_rating')
+  .select('restaurant_id', 'place_id', 'restaurant_name', 'restaurant_address')
   .where({ restaurant_id: id })
   .first();
 }
@@ -28,7 +28,7 @@ function findByRestaurantId(id) {
 // GET SPECIFIC RESTAURANT BY PLACE_ID
 function findByPlaceId(id) {
   return db("restaurants")
-  .select('restaurant_id', 'place_id', 'average_rating')
+  .select('restaurant_id', 'place_id')
   .where({ place_id: id })
   .first();
 }
@@ -48,9 +48,9 @@ function averageRatingByPlace_Id(place_id) {
 }
 
 // ADD NEW RESTAURANT
-function addRestaurant(place_id) {
+function addRestaurant(place_id, restaurant_name, restaurant_address) {
   return db("restaurants")
-    .insert({ place_id }, "restaurant_id")
+    .insert({ place_id, restaurant_name, restaurant_address }, "restaurant_id")
     .then((ids) => {
       return findByRestaurantId(ids[0]);
     });

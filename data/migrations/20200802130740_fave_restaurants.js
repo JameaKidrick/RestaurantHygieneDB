@@ -1,6 +1,6 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable('reviews', table => {
+  return knex.schema.createTable('fave_restaurants', table => {
     table
       .increments('id');
 
@@ -22,18 +22,10 @@ exports.up = function(knex) {
       .notNullable()
 
     table
-      .float('rating')
-      .notNullable()
-
-    table
-      .varchar('review', 255)
-      .notNullable()
-
-    table
       .timestamps(true, true)
   })
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('reviews');
+  return knex.schema.dropTableIfExists('fave_restaurants');
 };

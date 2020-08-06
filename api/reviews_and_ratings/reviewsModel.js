@@ -22,6 +22,8 @@ function find () {
 // GET LIST OF REVIEWS BY RESTAURANT'S ID
 function findByRestaurantId(id) {
   return db('reviews')
+    .select('reviews.id', 'reviews.user_id', 'reviews.restaurant_id', 'reviews.rating', 'reviews.review', 'reviews.created_at', 'users.username')
+    .join('users', 'users.user_id', '=', 'reviews.user_id')
     .where({ restaurant_id:id })
 }
 
@@ -44,6 +46,8 @@ function findUserReview(user_id, review_id) {
 // GET LIST OF REVIEWS BY USER'S ID
 function findAllUserReviews(user_id) {
   return db('reviews')
+    .select('reviews.id', 'reviews.user_id', 'reviews.restaurant_id', 'reviews.rating', 'reviews.review', 'reviews.created_at', 'restaurants.place_id', 'restaurants.restaurant_name', 'restaurants.restaurant_address')
+    .join('restaurants', 'restaurants.restaurant_id', '=', 'reviews.restaurant_id')
     .where({ user_id })
 }
 

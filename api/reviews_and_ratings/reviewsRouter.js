@@ -123,6 +123,7 @@ router.get("/ratings/restaurant/:restaurant_id", [validateRestaurantID], (req, r
 
 // POST NEW REVIEW
 router.post("/restaurant/:place_id", [verifyToken], (req, res) => {
+  let restaurant_address = null
   const place_id = req.params.place_id;
 
   if (!req.body.review) {
@@ -131,11 +132,15 @@ router.post("/restaurant/:place_id", [verifyToken], (req, res) => {
     return res.status(400).json({ error: "Please add a rating" });
   }
 
+  if(req.body.restaurant_address){
+    restaurant_address = req.body.restaurant_address
+  }
+
   restaurantsDB
     .findByPlaceId(place_id)
     .then((restaurant) => {
       if (!restaurant) {
-        return restaurantsDB.addRestaurant(place_id).then((newRestaurant) => {
+        return restaurantsDB.addRestaurant(place_id, req.body.restaurant_name, restaurant_address).then((newRestaurant) => {
           return newRestaurant;
         });
       } else {
