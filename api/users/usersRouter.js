@@ -56,7 +56,6 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
               }
               usersDB.update(user.user_id, changes)
                 .then(update => {
-                  // console.log(update)
                   res.status(201).json({
                     message: "User information successfully updated.",
                     user:{ user_id: update.user_id, first_name: update.first_name, last_name: update.last_name, username: update.username},
