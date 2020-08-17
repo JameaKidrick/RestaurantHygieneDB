@@ -31,7 +31,6 @@ const validateBody = require("../middleware/validateBody");
 router.post("/register", [validateBody], (req, res) => {
   const hash = bcrypt.hashSync(req.user.password, 10);
   req.user.password = hash;
-  console.log('REGISTER 0')
 
   usersDB
     .add(req.user)
@@ -50,12 +49,10 @@ router.post("/register", [validateBody], (req, res) => {
             });
         })
         .catch((error) => {
-          console.log('REGISTER 1')
           res.status(500).json({ error: "Internal server error", error });
         });
     })
     .catch((error) => {
-      console.log('REGISTER 2')
       res.status(500).json({ error: "Internal server error", error });
     });
 });
