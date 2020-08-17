@@ -112,7 +112,6 @@ describe("Google APIs: POST /api/locate/next", function () {
   });
 
   test.skip("Should receive 200: response.data.results array is present after receiving next page", async function () {
-    console.log(next);
     let test = await request(server)
       .post("/api/locate/next")
       .send({ pageToken: next })
@@ -120,7 +119,6 @@ describe("Google APIs: POST /api/locate/next", function () {
         expect(response.status).toEqual(200);
         expect(Object.keys(response.body)).toContain("results");
       });
-    console.log(test);
   });
 });
 

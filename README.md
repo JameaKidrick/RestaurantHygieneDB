@@ -39,8 +39,17 @@ ___
 | GET           | `/api/restaurants/place/:place_id`       | Get a specific restaurant by its place_id which is originally given by the Google Places API
 | GET           | `/api/restaurants/ratings/place/:place_id`       | Get a specific restaurant's average hygiene rating by its place_id
 | POST          | `/api/restaurants`    | Create a new restaurant
-| PUT           | `/api/restaurants/:restaurant_id`       | Update restaurant by restaurant id          | Token |
-| DELETE        | `/api/restaurants/:restaurant_id`       | Delete restaurant by restaurant id          | Token |
+| PUT           | `/api/restaurants/:restaurant_id`       | Update restaurant by restaurant id
+| DELETE        | `/api/restaurants/:restaurant_id`       | Delete restaurant by restaurant id
+
+### _Favorite Restaurants_
+| Method        | Request URL               | Description                                                                     | Authorization Needed            |
+| ------------- | :-----------------------: | ------------------------------------------------------------------------------- | :--------------------: |
+| GET           | `/api/favorites`           | Gets a list of all favorited restaurants          | Token |
+| GET           | `/api/favorites/:favorite_id`       | Get a specific favorite restaurant by its id          | Token |
+| GET           | `/api/favorites/user/:userid`       | Get a user's favorite restaurants by user id          | Token |
+| POST          | `/api/favorites`    | Create a new favorite restaurant          | Token |
+| DELETE        | `/api/favorites/:favorite_id`       | Delete favorite restaurant by favorite id          | Token |
 
 ### _Reviews_
 | Method        | Request URL               | Description                                                                     | Authorization Needed            |
@@ -145,24 +154,29 @@ The GET to `/api/users/userid` responds with the following:
 | last_name  | string      |
 | username   | string      |
 -----------------------------------------------------
-The PUT to `/api/users/:userid` expects at least one of the following fields:
+The PUT to `/api/users/:userid` expects at least one of the following fields and requires a password confirmation:
 ```
 {
   "first_name": "new_first_name",
   "last_name": "new_last_name",
   "username": "new_username",
+  "password": "new_password",
+  "confirm_password": "current_password"
 }
 ```
-| Property   | Data Type   |
-| ---------- | :---------: |
-| first_name | string      |
-| last_name  | string      |
-| username   | string      |
+| Property           | Data Type   | Required   |
+| ------------------ | :---------: | :--------: |
+| first_name         | string      | no         |
+| last_name          | string      | no         |
+| username           | string      | no         |
+| password           | string      | no         |
+| confirm_password   | string      | yes        |
 
 Example change:
 ```
 {
   "username": "new_username123",
+  "confirm_password": "current_password"
 }
 ```
 It will look like this after changing at least one field:
@@ -307,6 +321,145 @@ The DELETE to `/api/restaurants/:restaurant_id` responds with the 'DELETED' obje
     "restaurant_id": 3,
     "place_id": "vE79xcQrtbvN4xEXAMPLEx58WpuMaHF8",
     "average_rating": 2,
+  }
+}
+```
+-----------------------------------------------------
+### _Favorite Restaurants_
+
+The GET to `/api/favorites` responds with all of the favorited restaurants in the database:
+```
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "restaurant_id": 1,
+    "created_at": "2020-08-02T17:14:24.514Z",
+    "updated_at": "2020-08-02T17:14:24.514Z",
+    "place_id": "gJIlgqqBlcEXAMPLEj3ftS8anbjQ64Dl",
+    "restaurant_name": "Restaurant 1 Name",
+    "restaurant_address": "123 address street, state zip_code"
+  },
+  {
+    "id": 2,
+    "user_id": 1,
+    "restaurant_id": 2,
+    "created_at": "2020-08-02T17:14:24.514Z",
+    "updated_at": "2020-08-02T17:14:24.514Z",
+    "place_id": "i8yIVkJIN9k7ZEXAMPLEIePDdvpeHL7n",
+    "restaurant_name": "Restaurant 2 Name",
+    "restaurant_address": "456 address street, state zip_code"
+  },
+  {
+    "id": 3,
+    "user_id": 3,
+    "restaurant_id": 3,
+    "created_at": "2020-08-02T17:14:24.514Z",
+    "updated_at": "2020-08-02T17:14:24.514Z",
+    "place_id": "92iyelTQpyEXAMPLEmmxy2vurQttOShr",
+    "restaurant_name": "Restaurant 3 Name",
+    "restaurant_address": "789 address street, state zip_code"
+  }
+]
+```
+| Property           | Data Type   |
+| ------------------ | :---------: |
+| id                 | primary key |
+| user_id            | integer      |
+| restaurant_id      | integer      |
+| created_at         | string      |
+| updated_at         | string      |
+| place_id           | string      |
+| restaurant_name    | string      |
+| restaurant_address | string      |
+-----------------------------------------------------
+The GET to `/api/favorites/:favorite_id` responds with the following:
+```
+{
+  "id": 3,
+  "user_id": 3,
+  "restaurant_id": 3,
+  "created_at": "2020-08-02T17:14:24.514Z",
+  "updated_at": "2020-08-02T17:14:24.514Z",
+  "place_id": "92iyelTQpyEXAMPLEmmxy2vurQttOShr",
+  "restaurant_name": "Restaurant 3 Name",
+  "restaurant_address": "789 address street, state zip_code"
+}
+```
+| Property           | Data Type   |
+| ------------------ | :---------: |
+| id                 | primary key |
+| user_id            | integer      |
+| restaurant_id      | integer      |
+| created_at         | string      |
+| updated_at         | string      |
+| place_id           | string      |
+| restaurant_name    | string      |
+| restaurant_address | string      |
+-----------------------------------------------------
+The GET to `/api/favorites/user/:userid` responds with the following:
+```
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "restaurant_id": 1,
+    "created_at": "2020-08-02T17:14:24.514Z",
+    "updated_at": "2020-08-02T17:14:24.514Z",
+    "place_id": "gJIlgqqBlcEXAMPLEj3ftS8anbjQ64Dl",
+    "restaurant_name": "Restaurant 1 Name",
+    "restaurant_address": "123 address street, state zip_code"
+  },
+  {
+    "id": 2,
+    "user_id": 1,
+    "restaurant_id": 2,
+    "created_at": "2020-08-02T17:14:24.514Z",
+    "updated_at": "2020-08-02T17:14:24.514Z",
+    "place_id": "i8yIVkJIN9k7ZEXAMPLEIePDdvpeHL7n",
+    "restaurant_name": "Restaurant 2 Name",
+    "restaurant_address": "456 address street, state zip_code"
+  }
+]
+```
+| Property           | Data Type   |
+| ------------------ | :---------: |
+| id                 | primary key |
+| user_id            | integer      |
+| restaurant_id      | integer      |
+| created_at         | string      |
+| updated_at         | string      |
+| place_id           | string      |
+| restaurant_name    | string      |
+| restaurant_address | string      |
+-----------------------------------------------------
+The POST to `/api/favorites` expects the following data:
+```
+{
+  "place_id": "YgGIKUUop38fvEXAMPLE9fDzCAy6ZAy6",
+  "restaurant_name": "Restaurant Name".
+  "restaurant_address": "123 Restaurant Street, State zip_code
+}
+```
+| Property   | Data Type   | Required   |
+| ---------- | :---------: | :--------: |
+| place_id   | string      | yes        |
+| restaurant_name   | string      | yes        |
+| restaurant_address   | string      | no        |
+-----------------------------------------------------
+The DELETE to `/api/favorites/favorite_id` responds with the 'DELETED' object:
+```
+{
+  "message": "Favorite restaurant was successfully deleted!",
+  "deletedFavorite": {
+    "id": 2,
+    "user_id": 1,
+    "restaurant_id": 2,
+    "created_at": "2020-08-02T17:14:24.514Z",
+    "updated_at": "2020-08-02T17:14:24.514Z",
+    "place_id": "i8yIVkJIN9k7ZEXAMPLEIePDdvpeHL7n",
+    "restaurant_name": "Restaurant 2 Name",
+    "restaurant_address": "456 address street, state zip_code"
   }
 }
 ```
@@ -580,4 +733,4 @@ The POST expects the `required` information:
 | ------------ | :---------: | ------- |
 | next_page    | string      | Next page token received from the previous API call |
 
-*Last Updated: 7/11/2020 by Jamea Kidrick*
+*Last Updated: 8/17/2020 by Jamea Kidrick*

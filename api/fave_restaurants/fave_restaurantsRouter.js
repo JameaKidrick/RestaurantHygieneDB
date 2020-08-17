@@ -7,7 +7,7 @@ const router = express.Router()
 /******************************* Middleware *******************************/
 const validateUserID = require('../middleware/validateUserID');
 const validateFaveID = (req, res, next) => {
-  const id = req.params.jxn_id;
+  const id = req.params.favorite_id;
 
   favesDB.findByID(id).then((favorite) => {
     if (!favorite) {
@@ -44,8 +44,8 @@ router.get('/', (req, res) => {
 })
 
 // GET SPECIFIC JUNCTION BY ID
-router.get('/:jxn_id', [validateFaveID], (req, res) => {
-  favesDB.findByID(req.params.jxn_id)
+router.get('/:favorite_id', [validateFaveID], (req, res) => {
+  favesDB.findByID(req.params.favorite_id)
     .then(favorite => {
       res.status(200).json(favorite)
     })
@@ -105,8 +105,8 @@ router.post('/', (req, res) => {
 })
 
 // DELETE JUNCTION
-router.delete('/:jxn_id', [validateFaveID, validateCreator], (req, res) => {
-  favesDB.removeFavorite(req.params.jxn_id)
+router.delete('/:favorite_id', [validateFaveID, validateCreator], (req, res) => {
+  favesDB.removeFavorite(req.params.favorite_id)
     .then(deletedFave => {
       res.status(201).json({ message: 'Favorite restaurant was successfully deleted!', deletedFave })
     })

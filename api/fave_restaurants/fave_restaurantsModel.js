@@ -31,7 +31,6 @@ function findByUserID(user_id) {
 
 // ADD NEW JUNCTION
 function addFavorite(info) {
-  console.log(info)
   return db('fave_restaurants')
     .insert(info, 'id')
     .then(ids => {

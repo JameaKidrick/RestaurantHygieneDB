@@ -43,19 +43,19 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
   const userid = req.params.userid
 
   if(Number(userid) === req.decodeJwt.id){
-    if(changes.password){
-      if(!changes.confirm_password){
-        res.status(401).json({ message: 'Please confirm your password' })
-      }else{
-        usersDB.findById(userid)
+    if(!changes.confirm_password){
+      res.status(401).json({ message: 'Please confirm your password' })
+    }else{
+      usersDB.findById(userid)
           .then(findUser => {
             if(bcrypt.compareSync(changes.confirm_password, findUser.password)){ // compare confirm_password to encrypted pw
               delete changes.confirm_password
-              const hash = bcrypt.hashSync(changes.password, 10); 
-              changes.password = hash;
+              if(changes.password){
+                const hash = bcrypt.hashSync(changes.password, 10); 
+                changes.password = hash;
+              }
               usersDB.update(user.user_id, changes)
                 .then(update => {
-                  // console.log(update)
                   res.status(201).json({
                     message: "User information successfully updated.",
                     user:{ user_id: update.user_id, first_name: update.first_name, last_name: update.last_name, username: update.username},
@@ -65,22 +65,9 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
               res.status(401).json({ message: 'Invalid credentials' })
             }
           })
-      }
-    }else{
-      usersDB
-        .update(user.user_id, changes)
-        .then((updatedUser) => {
-          return res.status(201).json({
-            message: "User information successfully updated.",
-            user:{ user_id: updatedUser.user_id, first_name: updatedUser.first_name, last_name: updatedUser.last_name, username: updatedUser.username},
-          });
-        })
-        .catch((error) => {
-          return res.status(500).json({ error: "Internal server error", error });
-        });
     }
   }else{
-    res.status(401).json({ error: 'You are not authorized to make changes to this account.' })
+    res.status(401).json({ error: 'You are not authorized to make changes to this account.'})
   }
 });
 
