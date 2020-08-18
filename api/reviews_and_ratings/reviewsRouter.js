@@ -65,7 +65,7 @@ router.get("/", [verifyToken], (req, res) => {
 // GET LIST OF REVIEWS BY RESTAURANT'S ID
 router.get(
   "/restaurant/:restaurant_id",
-  [verifyToken, validateRestaurantID],
+  [validateRestaurantID],
   (req, res) => {
     reviewsDB
       .findByRestaurantId(req.params.restaurant_id)
