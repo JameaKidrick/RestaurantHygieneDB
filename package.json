@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env DATABASE_ENV=testing jest --watch",
-    "test-faves-model": "cross-env DATABASE_ENV=testing jest /api/fave_restaurants/tests/fave_restaurantsModel.test.js --watch",
+    "test-faves-router": "cross-env DATABASE_ENV=testing jest /api/fave_restaurants/tests/fave_restaurantsRouter.test.js --watch",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
