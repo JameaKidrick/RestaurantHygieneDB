@@ -48,7 +48,7 @@ router.put("/:userid", [validateUserID, validateUsername], (req, res) => {
     }else{
       usersDB.findById(userid)
           .then(findUser => {
-            if(bcrypt.compareSync(changes.confirm_password, findUser.password)){ // compare confirm_password to encrypted pw
+            if(bcrypt.compareSync(changes.confirm_password, findUser.password)){
               delete changes.confirm_password
               if(changes.password){
                 const hash = bcrypt.hashSync(changes.password, 10); 

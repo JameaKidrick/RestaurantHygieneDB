@@ -125,12 +125,30 @@ describe("Setting up token for authorization", function () {
           expect(response.body.error).toBe("You are not authorized to make changes to this account.");
         });
     });
+
+    test("Should receive 401: missing confirm_password", function () {
+      const id = 2;
+      const new_user_info = {
+        username: "new_username",
+        first_name: "new_first_name",
+      };
+  
+      return request(server)
+        .put(`/api/users/${id}`)
+        .set('Authorization', token)
+        .send(new_user_info)
+        .then((response) => {
+          expect(response.status).toEqual(401);
+          expect(response.body.error).toBe("You are not authorized to make changes to this account.");
+        });
+    });
   
     test("Should receive 201: update specified user information", function () {
       const id = 4;
       const new_user_info = {
         username: "new_username",
         first_name: "new_first_name",
+        confirm_password: "password4"
       };
   
       return request(server)
