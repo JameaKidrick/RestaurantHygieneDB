@@ -23,9 +23,9 @@ module.exports = {
     client: 'pg',
     useNullAsDefault: true,
     connection: {
-      database: process.env.DEV_DB_TEST_DATABASE,
-      user:     process.env.DEV_DB_USERNAME,
-      password: process.env.DEV_DB_PASSWORD
+      database: process.env.TEST_DB_DATABASE,
+      user:     process.env.TEST_DB_USERNAME,
+      password: process.env.TEST_DB_PASSWORD
     },
     migrations: {
       directory: './data/migrations'

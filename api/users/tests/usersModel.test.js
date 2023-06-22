@@ -29,6 +29,22 @@ const usersDummyData = [
   },
 ];
 
+// // TEST OF THE TESTING
+// const can = {
+//   name: 'pamplemousse',
+//   ounces: 12,
+// };
+
+// describe('the can', () => {
+//   test('has 12 ounces', () => {console.log(`ENVIRONMENT: ${environment}`)
+//     expect(can.ounces).toBe(12);
+//   });
+
+//   test('has a sophisticated name', () => {
+//     expect(can.name).toBe('pamplemousse');
+//   });
+// });
+
 describe("GET user(s)", function () {
   beforeAll(async () => {
     await db.raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
