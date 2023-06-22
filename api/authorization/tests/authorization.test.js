@@ -2,6 +2,22 @@ const request = require("supertest");
 const server = require("../../server");
 const db = require("../../../data/dbConfig");
 
+// // TEST OF THE TESTING
+// const can = {
+//   name: 'pamplemousse',
+//   ounces: 12,
+// };
+
+// describe('the can', () => {
+//   test('has 12 ounces', () => {
+//     expect(can.ounces).toBe(12);
+//   });
+
+//   test('has a sophisticated name', () => {
+//     expect(can.name).toBe('pamplemousse');
+//   });
+// });
+
 describe("Register: POST /register", function () {
   afterEach(() => {
     return db.raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE");

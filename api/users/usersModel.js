@@ -42,7 +42,7 @@ function add(user) {
   return db("users")
     .insert(user, "user_id")
     .then((newUser) => {
-      return newUser[0];
+      return newUser[0].user_id;
     });
 }
 

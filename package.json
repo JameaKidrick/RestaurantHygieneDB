@@ -7,7 +7,7 @@
     "testSanity": "cross-env DATABASE_ENV=testing jest ../server tests/tests/sanity_checks.test.js",
     "testUsersModel": "cross-env DATABASE_ENV=testing jest ../users/tests/usersModel.test.js --detectOpenHandles",
     "testUsersRouter": "cross-env DATABASE_ENV=testing jest ../users/tests/usersRouter.test.js",
-    "testAuthorization": "cross-env DATABASE_ENV=testing jest ../authorization/tests/authorization.test.js",
+    "testAuthorization": "cross-env DATABASE_ENV=testing jest ../authorization/tests/authorization.test.js --watch",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
