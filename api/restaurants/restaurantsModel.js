@@ -48,11 +48,12 @@ function averageRatingByPlace_Id(place_id) {
 }
 
 // ADD NEW RESTAURANT
-function addRestaurant(place_id, restaurant_name, restaurant_address) {
+function addRestaurant({place_id, restaurant_name, restaurant_address}) {
+  restaurant_info = { place_id, restaurant_name, restaurant_address }
   return db("restaurants")
-    .insert({ place_id, restaurant_name, restaurant_address }, "restaurant_id")
+    .insert(restaurant_info, "restaurant_id")
     .then((ids) => {
-      return findByRestaurantId(ids[0]);
+      return findByRestaurantId(ids[0].restaurant_id);
     });
 }
 

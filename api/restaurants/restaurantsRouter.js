@@ -66,18 +66,13 @@ router.get('/ratings/place/:place_id', (req, res) => {
 
 // ADD NEW RESTAURANT
 router.post('/', (req, res) => {
-  let restaurant_address = null
   if(!req.body.place_id){
     return res.status(400).json({ error: 'Please include the place_id.' })
   }else if(!req.body.restaurant_name){
     return res.status(400).json({ error: 'Please include the restaurant name.' })
   }
 
-  if(req.body.restaurant_address){
-    restaurant_address = req.body.restaurant_address
-  }
-
-  restaurantsDB.addRestaurant(req.body.place_id, req.body.restaurant_name, restaurant_address)
+  restaurantsDB.addRestaurant(req.body)
     .then(newRestaurant => {
       res.status(201).json({ message: 'Restaurant successfully created!', newRestaurant })
     })

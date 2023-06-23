@@ -70,7 +70,7 @@ function addReview(user_id, restaurant_id, rating, review) {
   return db('reviews')
     .insert({ user_id, restaurant_id, rating, review }, 'id')
     .then(ids => {
-      return findById(ids[0])
+      return findById(ids[0].id)
     })
 }
 

@@ -84,7 +84,8 @@ describe('POST new restaurant at /restaurants', function () {
 
   test('Should receive 201: add a new restaurant to the database', function () {
     const place = {
-      place_id: 'UOFstAXGBKm4IDuoASCP8iFj'
+      place_id: 'UOFstAXGBKm4IDuoASCP8iFj',
+      restaurant_name: 'Test Place'
     }
 
     return request(server)

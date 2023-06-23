@@ -51,9 +51,11 @@ describe("POST restaurant", function () {
   test("Create a new restaurant: database restaurant count should increase by 1 and the new restaurant's information should be present", async function () {
     const new_restaurant = {
       place_id: "mfAz1Ue3gWR22BaY0haZ549Y",
+      restaurant_name: "Test Restaurant",
+      restaurant_address: "101 Main Street" // Not Required
     };
 
-    await addRestaurant(new_restaurant.place_id);
+    await addRestaurant(new_restaurant);
     const restaurants = await db("restaurants");
 
     expect(restaurants).toHaveLength(4);
