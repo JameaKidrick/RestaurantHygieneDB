@@ -179,6 +179,7 @@ describe("Setting up token for authorization", function () {
       const new_review = {
         review: "I don't recommend this place, but whatever...",
         rating: 2,
+        restaurant_name: 'Test Restaurant'
       };
 
       return request(server)

@@ -136,11 +136,13 @@ router.post("/restaurant/:place_id", [verifyToken], (req, res) => {
     restaurant_address = req.body.restaurant_address
   }
 
+
+  
   restaurantsDB
     .findByPlaceId(place_id)
     .then((restaurant) => {
       if (!restaurant) {
-        return restaurantsDB.addRestaurant(place_id, req.body.restaurant_name, restaurant_address).then((newRestaurant) => {
+        return restaurantsDB.addRestaurant({place_id, restaurant_name:req.body.restaurant_name, restaurant_address:req.body.restaurant_address}).then((newRestaurant) => {
           return newRestaurant;
         });
       } else {
