@@ -68,7 +68,7 @@ function averageRating(restaurant_id) {
 // POST NEW REVIEW
 function addReview(user_id, restaurant_id, rating, review) {
   return db('reviews')
-    .insert({ user_id, restaurant_id, rating, review }, 'id')
+    .insert({user_id, restaurant_id, rating, review}, 'id')
     .then(ids => {
       return findById(ids[0].id)
     })

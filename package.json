@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "testSanity": "cross-env DATABASE_ENV=testing jest ../server tests/tests/sanity_checks.test.js",
-    "testRestaurantsModel": "cross-env DATABASE_ENV=testing jest ../Restaurants/tests/RestaurantsModel.test.js --watch",
-    "testRestaurantsRouter": "cross-env DATABASE_ENV=testing jest ../Restaurants/tests/RestaurantsRouter.test.js --watch",
+    "testReviewsModel": "cross-env DATABASE_ENV=testing jest ../Reviews_and_ratings/tests/ReviewsModel.test.js --watch",
+    "testReviewsRouter": "cross-env DATABASE_ENV=testing jest ../Reviews_and_ratings/tests/ReviewsRouter.test.js --watch",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
