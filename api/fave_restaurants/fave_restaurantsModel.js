@@ -34,7 +34,7 @@ function addFavorite(info) {
   return db('fave_restaurants')
     .insert(info, 'id')
     .then(ids => {
-      return findByID(ids[0])
+      return findByID(ids[0].id)
     })
 }
 

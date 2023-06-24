@@ -83,7 +83,7 @@ router.post('/', (req, res) => {
     .findByPlaceId(req.body.place_id)
     .then((restaurant) => {
       if(!restaurant){
-        return restaurantsDB.addRestaurant(req.body.place_id, req.body.restaurant_name, restaurant_address).then(newRestaurant => {
+        return restaurantsDB.addRestaurant({place_id:req.body.place_id, restaurant_name:req.body.restaurant_name, restaurant_address}).then(newRestaurant => {
           return newRestaurant
         })
       }else{
